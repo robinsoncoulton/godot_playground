@@ -13,9 +13,27 @@ _global_script_classes=[ {
 "class": "GameWorld",
 "language": "GDScript",
 "path": "res://GameWorld.gd"
+}, {
+"base": "Node",
+"class": "MapGenerator",
+"language": "GDScript",
+"path": "res://Scripts/MapGenerator/MapGenerator.gd"
+}, {
+"base": "TileSet",
+"class": "MockedTileset",
+"language": "GDScript",
+"path": "res://Scripts/MapGenerator/MockedTileset.gd"
+}, {
+"base": "Node",
+"class": "Tile",
+"language": "GDScript",
+"path": "res://Scripts/Tile/Tile.gd"
 } ]
 _global_script_class_icons={
-"GameWorld": ""
+"GameWorld": "",
+"MapGenerator": "",
+"MockedTileset": "",
+"Tile": ""
 }
 
 [application]
@@ -23,6 +41,10 @@ _global_script_class_icons={
 config/name="procedural playground"
 run/main_scene="res://GameWorld.tscn"
 config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/gut/plugin.cfg" )
 
 [input]
 
