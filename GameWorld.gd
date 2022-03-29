@@ -10,7 +10,6 @@ export var y_size := 12
 
 var size := Vector2(x_size, y_size)
 onready var _tile_map: TileMap = $GroundLayer
-#var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_setup()
