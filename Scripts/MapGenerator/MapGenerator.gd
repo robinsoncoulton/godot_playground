@@ -20,8 +20,6 @@ func _init(width, height, tile_set) -> void:
 	
 func _generateTileMatrix() -> void:
 	var _generation = []
-	print(_tile_set)
-	print(_tile_set.find_tile_by_name("grass.png"))
 	for x in range(0, _width):
 		var _column = []
 		for y in range(0, _height):

@@ -9,7 +9,7 @@ export var x_size := 12
 export var y_size := 12
 
 var size := Vector2(x_size, y_size)
-onready var _tile_map: TileMap = $TileMap
+onready var _tile_map: TileMap = $GroundLayer
 #var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
@@ -19,9 +19,12 @@ func _setup() -> void:
 	var map_size_px := size * _tile_map.cell_size
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D, SceneTree.STRETCH_ASPECT_KEEP, map_size_px)
 	OS.set_window_size(2 * map_size_px)
-	_map = MapGenerator.new(x_size, y_size, _tile_map.tile_set)
+	_generateRandomMap()
 	_renderMap()
 	
+	
+func _generateRandomMap() -> void:
+	_map = MapGenerator.new(x_size, y_size, _tile_map.tile_set)
 	
 func _renderMap() -> void:
 	emit_signal("started")
@@ -58,6 +61,7 @@ func _renderMap() -> void:
 #	var water_tile = $TileMap.tile_set.find_tile_by_name("water.png")
 #	return water_tile if _rng.randf() < probability else grass_tile
 #
-#func _unhandled_input(event: InputEvent) -> void:
-#	if event.is_action_pressed("confirm"):
-#		generate()
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("confirm"):
+		_generateRandomMap()
+		_renderMap()
