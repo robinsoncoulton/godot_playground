@@ -5,25 +5,32 @@ signal started
 signal finished
 
 var _map: MapGenerator
+var _player: Player
+
 export var x_size := 12
 export var y_size := 12
 
 var size := Vector2(x_size, y_size)
+
 onready var _tile_map: TileMap = $GroundLayer
+onready var _player_layer: TileMap = $PlayerLayer
 
 func _ready() -> void:
 	_setup()
 
 func _setup() -> void:
+	_tile_map.clear()
+	_player_layer.clear()
 	var map_size_px := size * _tile_map.cell_size
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_2D, SceneTree.STRETCH_ASPECT_KEEP, map_size_px)
 	OS.set_window_size(2 * map_size_px)
-	_generateRandomMap()
+	_generateRandomMap(Vector2(randi() % x_size, randi() % x_size))
 	_renderMap()
+	_setPlayerStart()
 	
 	
-func _generateRandomMap() -> void:
-	_map = MapGenerator.new(x_size, y_size, _tile_map.tile_set)
+func _generateRandomMap(startLocation: Vector2) -> void:
+	_map = MapGenerator.new(x_size, x_size, _tile_map.tile_set, startLocation)
 	
 func _renderMap() -> void:
 	emit_signal("started")
@@ -31,36 +38,35 @@ func _renderMap() -> void:
 		for cell in mapRow: 
 			_tile_map.set_cell(cell.getCoordinates().x, cell.getCoordinates().y, cell.getTilesetTile())
 	emit_signal("finished")
-
-#func generate() -> void:
-#	emit_signal("started")
-#	_generate_perimeter()
-#	_generate_inner()
-#	emit_signal("finished")
-#
-#func _generate_perimeter() -> void:
-#	var dirt_tile = $TileMap.tile_set.find_tile_by_name("dirt.png")
-#	for x in [0, size.x - 1]:
-#		for y in range(0, size.y):
-#			_tile_map.set_cell(x, y, dirt_tile)
-#
-#	for x in range(1, size.x - 1):
-#		for y in [0, size.y - 1]:
-#			_tile_map.set_cell(x, y, dirt_tile)
-#
-#func _generate_inner() -> void:
-#	for x in range(1, size.x - 1):
-#		for y in range(1, size.y - 1):
-#			var cell := _get_random_tile(ground_probability)
-#			_tile_map.set_cell(x, y, cell)	
-#
-#
-#func _get_random_tile(probability: float) -> int:
-#	var grass_tile = $TileMap.tile_set.find_tile_by_name("grass.png")
-#	var water_tile = $TileMap.tile_set.find_tile_by_name("water.png")
-#	return water_tile if _rng.randf() < probability else grass_tile
+	
+func _setPlayerStart() -> void:
+	_player = Player.new(_player_layer.tile_set, _map.getStart(), size)
+	_player_layer.set_cell(_player.getCoordinates().x, _player.getCoordinates().y, _player.getSprite())
+	
+func _renderPlayerMove() -> void:
+	_player_layer.clear()
+	_player_layer.set_cell(_player.getCoordinates().x, _player.getCoordinates().y, _player.getSprite())
+	if _player.getCoordinates() == _map.getGoal():
+		_generateRandomMap(_map.getGoal())
+		_renderMap()
 #
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("confirm"):
-		_generateRandomMap()
-		_renderMap()
+		_setup()
+		
+	if event.is_action_pressed("move_north"):
+		_player.moveNorth()
+		_renderPlayerMove()
+		
+	if event.is_action_pressed("move_east"):
+		_player.moveEast()	
+		_renderPlayerMove()
+		
+	if event.is_action_pressed("move_west"):
+		_player.moveWest()
+		_renderPlayerMove()
+		
+	if event.is_action_pressed("move_south"):
+		_player.moveSouth()
+		_renderPlayerMove()
+		
