@@ -12,12 +12,12 @@ var _tile_set: TileSet
 var _start: Vector2
 var _goal: Vector2
 
-func _init(width, height, tile_set) -> void:
+func _init(width, height, tile_set, start_location) -> void:
 	emit_signal("started")
 	self._width = width
 	self._height = height
 	self._tile_set = tile_set
-	self._start = _generateStartLocation()
+	self._start = start_location
 	self._goal = _generateGoalLocation()
 	_generateTileMatrix()
 	emit_signal("finished")
@@ -37,9 +37,7 @@ func _generateTileMatrix() -> void:
 			_column.append(_tile)
 		_generation.append(_column)	
 		self._tile_matrix = _generation
-		
-func _generateStartLocation() -> Vector2:
-	return Vector2(randi() % _width, randi() % _height)
+	
 
 func _generateGoalLocation() -> Vector2:
 	var _vector: Vector2 = _start
