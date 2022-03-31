@@ -6,9 +6,9 @@ var _tilesetTile: int
 var _traversable: bool
 var _coordinate: Vector2
 
-func _init(tilesetTile: int, coordinate: Vector2) -> void:
+func _init(tilesetTile: int, coordinate: Vector2, traversable: bool = true) -> void:
 	self._tilesetTile = tilesetTile
-	self._traversable = true
+	self._traversable = traversable
 	self._coordinate = coordinate
 
 func getTilesetTile() -> int:

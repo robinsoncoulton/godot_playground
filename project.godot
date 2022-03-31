@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "GameWorld",
 "language": "GDScript",
-"path": "res://GameWorld.gd"
+"path": "res://Scripts/GameWorld/GameWorld.gd"
 }, {
 "base": "Node",
 "class": "MapGenerator",
